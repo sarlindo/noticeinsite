@@ -8,6 +8,7 @@ import botocore
 import collections
 import jinja2
 import os
+import logging
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -24,6 +25,7 @@ def index(path):
     if path is not "" and not path.endswith("/"):
         path = path + '/'
     if path is not "" and not doesS3PathKeyExist(s3,s3Bucket,path):
+        logging.error('Company not found %s', path)
         abort(404)
 
     companydatafiles = {}
@@ -77,7 +79,7 @@ def validMetakeyfile(metakeyvalues):
         value = metakeyvalues['ClientName']
         return True
     except KeyError:
-        print "invalid meta file"
+        logging.error('Invalid metadata file found')
         return False
 
 def getFolderFileListAndFilterData(client,bucket,keypath):
@@ -87,9 +89,9 @@ def getFolderFileListAndFilterData(client,bucket,keypath):
         keypath = keypath[:-1]
 
     for folder in folders(client,bucket,keypath):
-        print folder
+        logging.info('Company Folder Name %s', folder)
         for subfolder in folders(client,bucket,prefix=folder):
-            print subfolder
+            logging.info('Company SubFolder Name %s', subfolder)
             if doesS3PathKeyExist(client,bucket,subfolder + 'meta.txt'):
                 metakeyvalues = getMetaData(client,bucket,subfolder + 'meta.txt')
 
