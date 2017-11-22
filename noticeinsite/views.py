@@ -53,7 +53,6 @@ def doesS3PathKeyExist(client, bucket, key):
 def getMetaData(client,bucket,keypath):
 
     result = client.get_object(Bucket=bucket, Key=keypath)
-
     text = result['Body'].read()
 
     metakeyvalues = {}
@@ -68,6 +67,19 @@ def getMetaData(client,bucket,keypath):
         metakeyvalues[var] = val
     return metakeyvalues
 
+def validMetakeyfile(metakeyvalues):
+    try:
+        value = metakeyvalues['ExpDate']
+        value = metakeyvalues['StartDate']
+        value = metakeyvalues['EventType']
+        value = metakeyvalues['PhoneNum']
+        value = metakeyvalues['EventDate']
+        value = metakeyvalues['ClientName']
+        return True
+    except KeyError:
+        print "invalid meta file"
+        return False
+
 def getFolderFileListAndFilterData(client,bucket,keypath):
 
     foldersfiles = {}
@@ -81,23 +93,24 @@ def getFolderFileListAndFilterData(client,bucket,keypath):
             if doesS3PathKeyExist(client,bucket,subfolder + 'meta.txt'):
                 metakeyvalues = getMetaData(client,bucket,subfolder + 'meta.txt')
 
-                expiredate = datetime.datetime.strptime(metakeyvalues['ExpDate'], "%b,%d,%Y")
-                startdate = datetime.datetime.strptime(metakeyvalues['StartDate'], "%b,%d,%Y")
+                if validMetakeyfile(metakeyvalues):
+                    expiredate = datetime.datetime.strptime(metakeyvalues['ExpDate'], "%b,%d,%Y")
+                    startdate = datetime.datetime.strptime(metakeyvalues['StartDate'], "%b,%d,%Y")
 
-                today = datetime.datetime.now().strftime("%b,%d,%Y")
-                today = datetime.datetime.strptime(today,"%b,%d,%Y")
-                if today < expiredate and today >= startdate:
+                    today = datetime.datetime.now().strftime("%b,%d,%Y")
+                    today = datetime.datetime.strptime(today,"%b,%d,%Y")
+                    if today < expiredate and today >= startdate:
 
-                    foldersfiles.setdefault(subfolder,{})
-                    foldersfiles[subfolder]['companyinfo'] = metakeyvalues
-                    foldersfiles[subfolder].setdefault('files',[])
+                        foldersfiles.setdefault(subfolder,{})
+                        foldersfiles[subfolder]['companyinfo'] = metakeyvalues
+                        foldersfiles[subfolder].setdefault('files',[])
 
-                    for file in files(client,bucket,prefix=subfolder):
-                        if not file.endswith("/"):
-                            if "meta.txt" not in file:
-                                #furl = '{}/{}/{}'.format(client.meta.endpoint_url, bucket, file)
-                                furl = client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': file}, ExpiresIn = 86400)
-                                foldersfiles[subfolder]['files'].append(furl)
+                        for file in files(client,bucket,prefix=subfolder):
+                            if not file.endswith("/"):
+                                if "meta.txt" not in file:
+                                    #furl = '{}/{}/{}'.format(client.meta.endpoint_url, bucket, file)
+                                    furl = client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': file}, ExpiresIn = 86400)
+                                    foldersfiles[subfolder]['files'].append(furl)
     return collections.OrderedDict(sorted(foldersfiles.items()))
 
 def folders(client, bucket, prefix=''):
