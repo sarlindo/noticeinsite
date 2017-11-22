@@ -113,6 +113,9 @@ def getFolderFileListAndFilterData(client,bucket,keypath):
                                     #furl = '{}/{}/{}'.format(client.meta.endpoint_url, bucket, file)
                                     furl = client.generate_presigned_url('get_object', Params = {'Bucket': bucket, 'Key': file}, ExpiresIn = 86400)
                                     foldersfiles[subfolder]['files'].append(furl)
+                if keypath == "":
+                        break
+
     return collections.OrderedDict(sorted(foldersfiles.items()))
 
 def folders(client, bucket, prefix=''):

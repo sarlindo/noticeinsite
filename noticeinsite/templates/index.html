@@ -20,8 +20,10 @@
                   For paper copies of any of the documents below, please call: phone number: {{ companydatafiles[folder]['companyinfo']['PhoneNum'] }}. Please allow 5 business days for processing and delivery.<br>
                   Document links will expire 1 year from the event date.
                 </div>
-               {% endif %}
+                {% endif %}
        </div>
+
+       {% if path != "" %}
        <div class="list-item-description">
            <p class="clip-verbiage">
             {% for file in companydatafiles[folder]['files'] %}
@@ -30,6 +32,7 @@
            {% endfor %}
          </p>
        </div>
+       {% endif %}
    </div>
    {% endfor %}
  </div>
