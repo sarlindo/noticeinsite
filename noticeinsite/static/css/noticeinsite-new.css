@@ -27,17 +27,18 @@ body {
   color: #000000;
   background-color: #f5f5f5;
 }
-/*
+
 .navbar-default {
     background-color: #1e222b;
 }
-*/
 
 .nav.navbar-nav.navbar-right li a {
-    color: #0088cc;
+    /*color: #0088cc;*/
+    color: #16fffa;
 }
 .navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > li > a:focus {color: #0088cc; background-color: #e3e3e3;}
+/*.navbar-default .navbar-nav > li > a:focus {color: #0088cc; background-color: #e3e3e3;}*/
+.navbar-default .navbar-nav > li > a:focus {color: #ffffff; background-color: #1e222b;}
 
 hr {
     display: block;
@@ -84,12 +85,14 @@ hr {
 }
 
 .list-item-title{
-    background: #f7f7f9;
+    /*background: #f7f7f9; */
+    background: #1e222b;
     overflow-wrap: break-word;
 }
 .list-item-title a{
     text-decoration: none;
-    color: #1e222c;
+/*    color: #1e222c; */
+    color: #16fffa;
     font-family:'FFDINWebProRegular', helvetica, arial, sans-serif;
     font-size: 1.263em;
     padding: 7px 15px;
@@ -114,10 +117,12 @@ hr {
     display: block;
 }
 .list-item-title a:active,.list-item-title a:visited{
-    color: #1e222c;
+    /*color: #1e222c;*/
+    color: #16fffa;
 }
 .list-item-title a:hover{
-    color: #033F7B;
+    /*color: #033F7B;*/
+    color: #ffffff;
 }
 .list-item-title .details {
     margin: 0 0 7px 15px;
