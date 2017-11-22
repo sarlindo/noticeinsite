@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div id="product-list-view" class="product-list-view row">
+   <div id="product-list-container" class="list-view-body"
+        ng-include="'product-list-item'">
+     {% for folder in companydatafiles %}
+     <div class="list-item">
+       <div class="list-item-title">
+               <span class="details pull-right"><span><i class="glyphicon glyphicon-save-file"></i></span></span>
+               <span><a href="{{ folder }}">{{ companydatafiles[folder]['companyinfo']['ClientName'] }}</a></span>
+               {% if companydatafiles|length == 1 %}
+                  <div class="list-item-company-info">
+                  {{ companydatafiles[folder]['companyinfo']['EventType'] }}
+                  <br>
+                  {{ companydatafiles[folder]['companyinfo']['EventDate'] }}
+                </div>
+                <div class="list-item-company-message">
+                  For paper copies of any of the documents below, please call: phone number: {{ companydatafiles[folder]['companyinfo']['PhoneNum'] }}. Please allow 5 business days for processing and delivery.<br>
+                  Document links will expire 1 year from the event date.
+                </div>
+               {% endif %}
+       </div>
+       <div class="list-item-description">
+           <p class="clip-verbiage">
+            {% for file in companydatafiles[folder]['files'] %}
+           <span><i class="glyphicon glyphicon-file"></i></span> <a href="{{ file }}">{{ file | basename }}</a>
+           <br>
+           {% endfor %}
+         </p>
+       </div>
+   </div>
+   {% endfor %}
+ </div>
+ </div>
+ {% endblock %}

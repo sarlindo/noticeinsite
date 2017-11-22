@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+ <div class="description notfounddescription">
+       <h2>Company Not Found</h2>
+       <p>
+         Sorry the company your looking for was not found. Please try looking here instead <a href="{{ url_for('index') }}">noticeinsite</a>
+       </p>
+ </div>
+ {% endblock %}
