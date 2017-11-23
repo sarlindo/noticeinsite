@@ -10,3 +10,4 @@ dev:
   cache_cluster_enabled: false
   cloudwatch_metrics_enabled: true
   cloudwatch_log_level: OFF  
+  log_level: INFO
